@@ -5769,6 +5769,7 @@ body.layout-3 .main-footer {
   padding-top: 130px;
   width: 100%;
   position: relative;
+  min-height: 500px !important;
 }
 .main-footer {
   padding: 20px 30px 20px 280px;
