@@ -5,8 +5,10 @@ import Footer from "./Footer";
 function Home() {
   return (
     <>
-      
+      <Nav/>
+      <div className="main-content">
 
+        {/* Main */}
 
         <section className="section">
           <div className="row ">
@@ -1094,6 +1096,11 @@ function Home() {
             </div>
           </div>
         </div>
+
+
+        </div>
+
+        <Footer/>
 
     </>
   );
