@@ -59,6 +59,7 @@ function Post() {
     try {
       const currentDate = new Date(); // Get the current date and time
       const formattedDate = currentDate.toLocaleDateString(); // Get only the date portion
+      const currentTime = currentDate.toLocaleTimeString();
 
       if (Description.trim() === "") {
         setDangerAlertMessage("Description can't be empty");
@@ -69,6 +70,7 @@ function Post() {
           img: downloadurl,
           description: Description,
           createdDate: formattedDate,
+          uploadTime: currentTime
         };
         await push(PostingRef, newPosting);
 
