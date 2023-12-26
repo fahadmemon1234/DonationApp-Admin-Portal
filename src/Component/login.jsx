@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../Config/firebase";
 import Logo from "./assets/img/Logo.png";
 
 function Login() {
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [dangerAlertMessage, setDangerAlertMessage] = useState("");
+
   const [email, setEmail] = useState("admin@gmail.com");
   const [password, setPassword] = useState("admin123");
 
@@ -23,17 +27,42 @@ function Login() {
 
       // Assuming you have a field like 'isAdmin' in your user data
       if (user && user.email === "admin@gmail.com") {
-        alert("Admin logged in:", user);
+        // alert("Admin logged in:", user);
+        setShowSuccessAlert(true);
         // Redirect to admin dashboard or perform admin-specific actions
+        setTimeout(() => {
         window.location.href = "/Home";
+      }, 2000);
       } else {
-        alert("You don't have permission to log in as admin.");
+        setDangerAlertMessage("You don't have permission to log in as admin.");
+        setShowDangerAlert(true);
         // Sign out the user or handle unauthorized access
       }
     } catch (error) {
-      alert("Login error:", error.message);
+      setDangerAlertMessage("Login error:", error.message);
+      setShowDangerAlert(true);
     }
   };
+
+  // Use useEffect to automatically hide the success alert after 3 seconds
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShowSuccessAlert(false);
+    }, 3000);
+
+    // Cleanup the timeout when the component is unmounted
+    return () => clearTimeout(timeoutId);
+  }, [showSuccessAlert]);
+
+  // Use useEffect to automatically hide the success alert after 3 seconds
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShowDangerAlert(false);
+    }, 3000);
+
+    // Cleanup the timeout when the component is unmounted
+    return () => clearTimeout(timeoutId);
+  }, [showDangerAlert]);
 
   return (
     <>
@@ -114,6 +143,50 @@ function Login() {
           </div>
         </section>
       </div>
+
+      {/* Notify */}
+      {/* Success Alert */}
+      {showSuccessAlert && (
+        <div
+          className="alert alert-success alert-dismissible show fade"
+          style={{
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            zIndex: 9999,
+          }}
+        >
+          <div className="alert-body">
+            <button
+              className="close"
+              onClick={() => setShowSuccessAlert(false)}
+            >
+              <span>×</span>
+            </button>
+            <span>Data in Successfully</span>
+          </div>
+        </div>
+      )}
+
+      {/* Danger Alert */}
+      {showDangerAlert && (
+        <div
+          className="alert alert-danger alert-dismissible show fade"
+          style={{
+            position: "fixed",
+            top: "10px",
+            right: "10px",
+            zIndex: 9999,
+          }}
+        >
+          <div className="alert-body">
+            <button className="close" onClick={() => setShowDangerAlert(false)}>
+              <span>×</span>
+            </button>
+            <span>{dangerAlertMessage}</span>
+          </div>
+        </div>
+      )}
     </>
   );
 }
