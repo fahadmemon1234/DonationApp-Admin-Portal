@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import feather from "feather-icons";
 import Logo from "./assets/img/Logo.png";
 import UserProfile from "./assets/img/User.jpg";
+import { Link, useLocation } from "react-router-dom";
 
 function Nav() {
   useEffect(() => {
     // Initialize Feather Icons after the component is mounted
     feather.replace();
   }, []);
+
+  const location = useLocation();
 
   return (
     <>
@@ -72,7 +75,6 @@ function Nav() {
                     ></i>{" "}
                     Profile
                   </a>{" "}
-                 
                   <div className="dropdown-divider"></div>
                   <a href="/" className="dropdown-item has-icon text-danger">
                     {" "}
@@ -93,17 +95,17 @@ function Nav() {
               </div>
               <ul className="sidebar-menu">
                 <li className="menu-header">Main</li>
-                <li className="active">
-                  <a href="/Home" className="nav-link">
+                <li className={location.pathname === "/Home" ? "active" : ""}>
+                  <Link to="/Home" className="nav-link">
                     <i data-feather="monitor"></i>
                     <span>Dashboard</span>
-                  </a>
+                  </Link>
                 </li>
-                <li className="dropdown">
-                  <a href="/Post" className="nav-link">
+                <li className={location.pathname === "/Post" ? "active" : ""}>
+                  <Link to="/Post" className="nav-link">
                     <i data-feather="share"></i>
                     <span>Post</span>
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </aside>
