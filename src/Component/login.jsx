@@ -69,6 +69,7 @@ function Login() {
       <div id="app">
         <section className="section">
           <img
+          alt=""
             src={Logo}
             width={170}
             style={{ display: "block", margin: "0 auto" }}

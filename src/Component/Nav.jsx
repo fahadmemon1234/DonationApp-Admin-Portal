@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import feather from "feather-icons";
 import Logo from "./assets/img/Logo.png";
-import UserProfile from './assets/img/User.jpg'
+import UserProfile from "./assets/img/User.jpg";
 
 function Nav() {
   useEffect(() => {
@@ -19,7 +19,7 @@ function Nav() {
               <ul className="navbar-nav mr-3">
                 <li>
                   <a
-                    href="#"
+                    href="/#"
                     data-toggle="sidebar"
                     class="nav-link nav-link-lg
 									collapse-btn"
@@ -49,15 +49,15 @@ function Nav() {
             <ul className="navbar-nav navbar-right">
               <li className="dropdown">
                 <a
-                  href="#"
+                  href="/#"
                   data-toggle="dropdown"
                   className="nav-link dropdown-toggle nav-link-lg nav-link-user"
                 >
                   {" "}
                   <img
-                    alt="image"
+                    alt=""
                     src={UserProfile}
-                    style={{borderRadius:'20px'}}
+                    style={{ borderRadius: "20px" }}
                     className="user-img-radious-style"
                   />{" "}
                   <span className="d-sm-none d-lg-inline-block"></span>
@@ -72,21 +72,9 @@ function Nav() {
                     ></i>{" "}
                     Profile
                   </a>{" "}
-                  <a href="timeline.html" className="dropdown-item has-icon">
-                    {" "}
-                    <i className="fas fa-bolt"></i>
-                    Activities
-                  </a>{" "}
-                  <a href="#" className="dropdown-item has-icon">
-                    {" "}
-                    <i className="fas fa-cog"></i>
-                    Settings
-                  </a>
+                 
                   <div className="dropdown-divider"></div>
-                  <a
-                    href="/"
-                    className="dropdown-item has-icon text-danger"
-                  >
+                  <a href="/" className="dropdown-item has-icon text-danger">
                     {" "}
                     <i className="fas fa-sign-out-alt"></i>
                     Logout
@@ -99,8 +87,7 @@ function Nav() {
             <aside id="sidebar-wrapper">
               <div className="sidebar-brand">
                 <a href="index.html">
-                  {" "}
-                  <img alt="image" src={Logo} width={70} />{" "}
+                  <img alt="" src={Logo} width="70" />
                   <span className="logo-name">Admin Portal</span>
                 </a>
               </div>
@@ -114,12 +101,10 @@ function Nav() {
                 </li>
                 <li className="dropdown">
                   <a href="/Post" className="nav-link">
-                  <i data-feather="share"></i>
+                    <i data-feather="share"></i>
                     <span>Post</span>
                   </a>
-                 
                 </li>
-                
               </ul>
             </aside>
           </div>

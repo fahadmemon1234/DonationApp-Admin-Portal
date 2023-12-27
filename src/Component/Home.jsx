@@ -118,22 +118,22 @@ function Home() {
                   <div className="card-header-action">
                     <div className="dropdown">
                       <a
-                        href="#"
+                        href="/#"
                         data-toggle="dropdown"
                         className="btn btn-warning dropdown-toggle"
                       >
                         Options
                       </a>
                       <div className="dropdown-menu">
-                        <a href="#" className="dropdown-item has-icon">
+                        <a href="/#" className="dropdown-item has-icon">
                           <i className="fas fa-eye"></i> View
                         </a>
-                        <a href="#" className="dropdown-item has-icon">
+                        <a href="/#" className="dropdown-item has-icon">
                           <i className="far fa-edit"></i> Edit
                         </a>
                         <div className="dropdown-divider"></div>
                         <a
-                          href="#"
+                          href="/#"
                           className="dropdown-item has-icon text-danger"
                         >
                           <i className="far fa-trash-alt"></i>
@@ -141,7 +141,7 @@ function Home() {
                         </a>
                       </div>
                     </div>
-                    <a href="#" className="btn btn-primary">
+                    <a href="/#" className="btn btn-primary">
                       View All
                     </a>
                   </div>
@@ -349,7 +349,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-8.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Wildan Ahdian"
@@ -359,7 +359,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-9.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -369,7 +369,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-10.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Sarah Smith"
@@ -395,7 +395,7 @@ function Home() {
                           <div className="badge badge-success">Low</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -424,7 +424,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-1.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Wildan Ahdian"
@@ -434,7 +434,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-2.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -460,7 +460,7 @@ function Home() {
                           <div className="badge badge-danger">High</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -489,7 +489,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-3.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Wildan Ahdian"
@@ -499,7 +499,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-4.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -509,7 +509,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-5.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Sarah Smith"
@@ -535,7 +535,7 @@ function Home() {
                           <div className="badge badge-info">Average</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -564,7 +564,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-7.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -574,7 +574,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-8.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Sarah Smith"
@@ -600,7 +600,7 @@ function Home() {
                           <div className="badge badge-success">Low</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -629,7 +629,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-9.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Wildan Ahdian"
@@ -639,7 +639,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-10.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -649,7 +649,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-2.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Sarah Smith"
@@ -675,7 +675,7 @@ function Home() {
                           <div className="badge badge-danger">High</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -704,7 +704,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-8.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Wildan Ahdian"
@@ -714,7 +714,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-9.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="John Deo"
@@ -724,7 +724,7 @@ function Home() {
                               <img
                                 className="rounded-circle"
                                 src="assets/img/users/user-10.png"
-                                alt="user"
+                                alt=""
                                 data-toggle="tooltip"
                                 title=""
                                 data-original-title="Sarah Smith"
@@ -750,7 +750,7 @@ function Home() {
                           <div className="badge badge-info">Average</div>
                         </td>
                         <td>
-                          <a href="#" className="btn btn-outline-primary">
+                          <a href="/#" className="btn btn-outline-primary">
                             Detail
                           </a>
                         </td>
@@ -787,7 +787,7 @@ function Home() {
                         Feature
                       </div>
                       <span className="font-weight-bold">#89754</span>
-                      <a href="javascript:void(0)">Please add advance table</a>
+                      <a href="/#">Please add advance table</a>
                       <p className="my-1">
                         Hi, can you please add new table for advan...
                       </p>
@@ -811,7 +811,7 @@ function Home() {
                         Bug
                       </div>
                       <span className="font-weight-bold">#57854</span>
-                      <a href="javascript:void(0)">Select item not working</a>
+                      <a href="/#">Select item not working</a>
                       <p className="my-1">
                         please check select item in advance form not work...
                       </p>
@@ -835,7 +835,7 @@ function Home() {
                         Query
                       </div>
                       <span className="font-weight-bold">#85784</span>
-                      <a href="javascript:void(0)">
+                      <a href="/#">
                         Are you provide template in Angular?
                       </a>
                       <p className="my-1">
@@ -861,7 +861,7 @@ function Home() {
                         Enhancement
                       </div>
                       <span className="font-weight-bold">#25874</span>
-                      <a href="javascript:void(0)">
+                      <a href="/#">
                         About template page load speed
                       </a>
                       <p className="my-1">
@@ -879,7 +879,7 @@ function Home() {
                   </div>
                 </div>
                 <a
-                  href="javascript:void(0)"
+                  href="/#"
                   className="card-footer card-link text-center small "
                 >
                   View All
@@ -962,8 +962,7 @@ function Home() {
           </div>
         </section>
         <div className="settingSidebar">
-          <a href="javascript:void(0)" className="settingPanelToggle">
-            {" "}
+          <a href="/#" className="settingPanelToggle">
             <i className="fa fa-spin fa-cog"></i>
           </a>
           <div className="settingSidebar-body ps-container ps-theme-default">
@@ -1087,7 +1086,7 @@ function Home() {
               </div>
               <div className="mt-4 mb-4 p-3 align-center rt-sidebar-last-ele">
                 <a
-                  href="#"
+                  href="/#"
                   className="btn btn-icon icon-left btn-primary btn-restore-theme"
                 >
                   <i className="fas fa-undo"></i> Restore Default
