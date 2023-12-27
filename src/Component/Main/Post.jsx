@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Nav from "../Nav";
 import Footer from "../Footer";
-import { ref, push, onValue, get, update, remove } from "firebase/database";
+import { ref, push, onValue, update, remove } from "firebase/database";
 import { db, storage } from "../../Config/firebase";
 import { uploadBytes, getDownloadURL, ref as sRef } from "firebase/storage";
 import $ from "jquery";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 function Post() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -54,44 +54,81 @@ function Post() {
   const handleAdd = () => {
     setSelectedFile(null);
     setSelectedImage(null);
+    setDescription("");
+    sethdnImg("");
   };
-
+  const [hdnID, sethdnID] = useState("");
   const handleSave = async () => {
     try {
       const currentDate = new Date(); // Get the current date and time
       const formattedDate = currentDate.toLocaleDateString(); // Get only the date portion
       const currentTime = currentDate.toLocaleTimeString();
 
-      if (Description.trim() === "") {
-        setDangerAlertMessage("Description can't be empty");
-        setShowDangerAlert(true);
-      } 
-      else if(!selectedFile){
-        setDangerAlertMessage("img can't be empty");
-        setShowDangerAlert(true);
-      }
-      else if (Description !== "" && selectedFile !== "") {
-        const PostingRef = ref(db, "Posting");
-        const newPosting = {
-          img: downloadurl,
-          description: Description,
-          createdDate: formattedDate,
-          uploadTime: currentTime,
-        };
-        await push(PostingRef, newPosting);
+      if (hdnID !== "" && hdnID !== null) {
+        if (Description.trim() === "") {
+          setDangerAlertMessage("Description can't be empty");
+          setShowDangerAlert(true);
+        } else {
+          if (selectedFile !== "" && selectedFile !== null) {
+            const PostingRef = ref(db, `Posting/${hdnID}`);
+            const newPosting = {
+              img: downloadurl,
+              description: Description,
+              createdDate: formattedDate,
+              uploadTime: currentTime,
+            };
+            await update(PostingRef, newPosting);
+          } else {
+            const PostingRef = ref(db, `Posting/${hdnID}`);
+            const newPosting = {
+              img: hdnimg,
+              description: Description,
+              createdDate: formattedDate,
+              uploadTime: currentTime,
+            };
+            await update(PostingRef, newPosting);
+          }
 
-        // Show the success alert
-        setShowSuccessAlert(true);
+          // Show the success alert
+          setShowSuccessAlert(true);
 
-        setTimeout(() => {
-          modalclose();
-          setSelectedFile(null);
-          setSelectedImage(null);
-          setDescription("");
-        }, 1000);
+          setTimeout(() => {
+            modalclose();
+            setSelectedFile(null);
+            setSelectedImage(null);
+            setDescription("");
+          }, 1000);
+        }
       } else {
-        setDangerAlertMessage("Data Not Insert");
-        setShowDangerAlert(true);
+        if (Description.trim() === "") {
+          setDangerAlertMessage("Description can't be empty");
+          setShowDangerAlert(true);
+        } else if (!selectedFile) {
+          setDangerAlertMessage("img can't be empty");
+          setShowDangerAlert(true);
+        } else if (Description !== "" && selectedFile !== "") {
+          const PostingRef = ref(db, "Posting");
+          const newPosting = {
+            img: downloadurl,
+            description: Description,
+            createdDate: formattedDate,
+            uploadTime: currentTime,
+          };
+          await push(PostingRef, newPosting);
+
+          // Show the success alert
+          setShowSuccessAlert(true);
+
+          setTimeout(() => {
+            modalclose();
+            setSelectedFile(null);
+            setSelectedImage(null);
+            setDescription("");
+          }, 1000);
+        } else {
+          setDangerAlertMessage("Data Not Insert");
+          setShowDangerAlert(true);
+        }
       }
     } catch (e) {
       console.log("Error adding Posting:", e);
@@ -165,36 +202,33 @@ function Post() {
 
   // const handleDeleteClick = () => {};
 
-
   const handleDeleteClick = (itemId) => {
     Swal.fire({
-      title: 'Confirm Deletion',
-      text: 'Are you sure you want to delete this item?',
-      icon: 'warning',
+      title: "Confirm Deletion",
+      text: "Are you sure you want to delete this item?",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'OK',
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "OK",
     }).then((result) => {
       if (result.isConfirmed) {
         // User clicked OK, show success modal
         Swal.fire({
-          icon: 'success',
-          title: 'Deleted!',
-          text: 'Your item has been deleted.',
-          confirmButtonColor: '#28a745',
+          icon: "success",
+          title: "Deleted!",
+          text: "Your item has been deleted.",
+          confirmButtonColor: "#28a745",
         });
-  
+
         // Perform additional actions if needed
-        console.log('OK button clicked');
+        console.log("OK button clicked");
       }
       deleteItem(itemId);
     });
   };
 
-
   const deleteItem = async (itemId) => {
-
     try {
       // Specify the path to the item you want to delete
       const itemRef = ref(db, `Posting/${itemId}`);
@@ -202,12 +236,26 @@ function Post() {
       // Remove the item from the database
       await remove(itemRef);
 
-      console.log('Item deleted successfully');
+      console.log("Item deleted successfully");
     } catch (error) {
-      console.error('Error deleting item:', error.message);
+      console.error("Error deleting item:", error.message);
     }
   };
-  
+
+  const [hdnimg, sethdnImg] = useState("");
+
+  // Edit Data
+  const handleEditClick = (itemId) => {
+    // console.log("Edit clicked for item with ID:", itemId);
+    // Add your editing logic here
+    sethdnID(itemId.id);
+    setDescription(itemId.description);
+    setSelectedFile(null);
+    setSelectedImage(itemId.img);
+    sethdnImg(itemId.img);
+    sethdnImg("");
+    sethdnImg(itemId.img);
+  };
 
   return (
     <>
@@ -215,6 +263,8 @@ function Post() {
 
       <div className="main-content">
         {/* Main */}
+        <input type="hidden" name="yourHiddenFieldName" value={hdnimg} />
+        <input type="hidden" name="yourHiddenFieldName" value={hdnID} />
 
         <div className="card">
           <div className="card-header">
@@ -280,7 +330,14 @@ function Post() {
                       <tr>
                         <td style={{ border: "1px solid green" }}>
                           <div style={{ display: "flex" }}>
-                            <button className="btn btn-primary">Edit</button>
+                            <button
+                              className="btn btn-primary"
+                              onClick={() => handleEditClick(item)}
+                              data-toggle="modal"
+                              data-target="#basicModal"
+                            >
+                              Edit
+                            </button>
                             <button
                               style={{ marginLeft: "10px" }}
                               onClick={() => handleDeleteClick(item.id)}
@@ -292,12 +349,12 @@ function Post() {
                         </td>
                         <td style={{ border: "1px solid green" }}>
                           <img
-                            alt="image"
+                            alt=""
                             src={item.img}
-                            class="rounded-circle"
+                            className="rounded-circle"
                             width="35"
                             data-toggle="tooltip"
-                            title="Wildan Ahdian"
+                            title={item.name}
                             style={{ display: "block", margin: "0 auto" }}
                           />
                         </td>
@@ -399,7 +456,9 @@ function Post() {
                 </div>
 
                 <div className="col-md-9 col-lg-9 col-sm-9">
-                  <div class="section-title">Img Upload: <span className="Validation">*</span></div>
+                  <div class="section-title">
+                    Img Upload: <span className="Validation">*</span>
+                  </div>
                   <div class="custom-file">
                     <input
                       type="file"
@@ -499,8 +558,6 @@ function Post() {
           </div>
         </div>
       )}
-
-     
     </>
   );
 }
