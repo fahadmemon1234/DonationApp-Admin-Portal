@@ -7,6 +7,9 @@ import { uploadBytes, getDownloadURL, ref as sRef } from "firebase/storage";
 import $ from "jquery";
 import Swal from "sweetalert2";
 
+
+const ItemsPerPage = 7;
+
 function Post() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -261,6 +264,21 @@ function Post() {
     sethdnImg(itemId.img);
   };
 
+
+
+
+  //   Pagination
+
+const [currentPage, setCurrentPage] = useState(1);
+
+const totalItems = sortedTableData.length;
+const totalPages = Math.ceil(totalItems / ItemsPerPage);
+
+const startIndex = (currentPage - 1) * ItemsPerPage;
+const endIndex = startIndex + ItemsPerPage;
+
+const visibleItems = sortedTableData.slice(startIndex, endIndex);
+
   return (
     <>
       <Nav />
@@ -330,7 +348,7 @@ function Post() {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedTableData.map((item) => (
+                    {visibleItems.map((item) => (
                       <tr>
                         <td style={{ border: "1px solid green" }}>
                           <div style={{ display: "flex" }}>
@@ -407,6 +425,28 @@ function Post() {
                   </tbody>
                 </table>
               </div>
+
+              <nav aria-label="Page navigation example" style={{ float: "right" }}>
+        <ul class="pagination">
+          <li class={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <a class="page-link" href="#" onClick={() => setCurrentPage(currentPage - 1)}>
+              Previous
+            </a>
+          </li>
+          {Array.from({ length: totalPages }, (_, index) => (
+            <li key={index} class={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+              <a class="page-link" href="#" onClick={() => setCurrentPage(index + 1)}>
+                {index + 1}
+              </a>
+            </li>
+          ))}
+          <li class={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <a class="page-link" href="#" onClick={() => setCurrentPage(currentPage + 1)}>
+              Next
+            </a>
+          </li>
+        </ul>
+      </nav>
             </div>
           </div>
         </div>
