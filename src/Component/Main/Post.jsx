@@ -223,8 +223,12 @@ function Post() {
 
         // Perform additional actions if needed
         console.log("OK button clicked");
+        deleteItem(itemId);
       }
-      deleteItem(itemId);
+      
+      else {
+        console.log("Cancel button clicked");
+      }
     });
   };
 

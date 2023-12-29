@@ -107,6 +107,12 @@ function Nav() {
                     <span>Post</span>
                   </Link>
                 </li>
+                <li className={location.pathname === "/Request" ? "active" : ""}>
+                  <Link to="/Request" className="nav-link">
+                    <i data-feather="clipboard"></i>
+                    <span>Request</span>
+                  </Link>
+                </li>
               </ul>
             </aside>
           </div>
