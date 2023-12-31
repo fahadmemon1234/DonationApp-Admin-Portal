@@ -244,7 +244,7 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                   <tbody>
 
                       {visibleItems.map((item) => (
-                        !item.RequestType && (
+                        item.RequestType === "" && (
                           <tr>
                            
 

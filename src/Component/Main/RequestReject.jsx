@@ -116,7 +116,7 @@ function RequestReject(){
                   <tbody>
 
                       {visibleItems.map((item) => (
-                        item.RequestType == false && (
+                        item.RequestType === false && (
                           <tr>
                            
 
