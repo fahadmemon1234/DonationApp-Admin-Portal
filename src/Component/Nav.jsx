@@ -22,7 +22,7 @@ function Nav() {
               <ul className="navbar-nav mr-3">
                 <li>
                   <a
-                    href="/#"
+                    href="#"
                     data-toggle="sidebar"
                     class="nav-link nav-link-lg
 									collapse-btn"
@@ -52,7 +52,7 @@ function Nav() {
             <ul className="navbar-nav navbar-right">
               <li className="dropdown">
                 <a
-                  href="/#"
+                  href="#"
                   data-toggle="dropdown"
                   className="nav-link dropdown-toggle nav-link-lg nav-link-user"
                 >
@@ -81,7 +81,7 @@ function Nav() {
           <div className="main-sidebar sidebar-style-2">
             <aside id="sidebar-wrapper">
               <div className="sidebar-brand">
-                <a href="index.html">
+                <a href="#">
                   <img alt="" src={Logo} width="70" />
                   <span className="logo-name">Admin Portal</span>
                 </a>
