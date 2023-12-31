@@ -67,14 +67,7 @@ function Nav() {
                 </a>
                 <div className="dropdown-menu dropdown-menu-right pullDown">
                   <div className="dropdown-title">SWIT</div>
-                  <a href="profile.html" className="dropdown-item has-icon">
-                    {" "}
-                    <i
-                      className="far
-										fa-user"
-                    ></i>{" "}
-                    Profile
-                  </a>{" "}
+                  
                   <div className="dropdown-divider"></div>
                   <a href="/" className="dropdown-item has-icon text-danger">
                     {" "}
@@ -103,14 +96,38 @@ function Nav() {
                 </li>
                 <li className={location.pathname === "/Post" ? "active" : ""}>
                   <Link to="/Post" className="nav-link">
-                    <i data-feather="share"></i>
-                    <span>Post</span>
+                    <i data-feather="image"></i>
+                    <span>Image Post</span>
+                  </Link>
+                </li>
+                <li className={location.pathname === "/VideoPost" ? "active" : ""}>
+                  <Link to="/VideoPost" className="nav-link">
+                    <i data-feather="film"></i>
+                    <span>Video Post</span>
                   </Link>
                 </li>
                 <li className={location.pathname === "/Request" ? "active" : ""}>
                   <Link to="/Request" className="nav-link">
                     <i data-feather="clipboard"></i>
                     <span>Request</span>
+                  </Link>
+                </li>
+                <li className={location.pathname === "/RequestNew" ? "active" : ""}>
+                  <Link to="/RequestNew" className="nav-link">
+                    <i data-feather="file-text"></i>
+                    <span>Approved Request</span>
+                  </Link>
+                </li>
+                <li className={location.pathname === "/RequestReject" ? "active" : ""}>
+                  <Link to="/RequestReject" className="nav-link">
+                    <i data-feather="file-text"></i>
+                    <span>Rejected Request</span>
+                  </Link>
+                </li>
+                <li className={location.pathname === "/Donation" ? "active" : ""}>
+                  <Link to="/Donation" className="nav-link">
+                    <i data-feather="book"></i>
+                    <span>Donation</span>
                   </Link>
                 </li>
               </ul>

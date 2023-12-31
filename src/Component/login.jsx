@@ -12,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState("admin123");
 
   const handleLogin = async (e) => {
+    debugger;
     e.preventDefault();
 
     const auth = getAuth(app);
@@ -31,8 +32,8 @@ function Login() {
         setShowSuccessAlert(true);
         // Redirect to admin dashboard or perform admin-specific actions
         setTimeout(() => {
-        window.location.href = "/Home";
-      }, 2000);
+          window.location.href = "/Home";
+        }, 2000);
       } else {
         setDangerAlertMessage("You don't have permission to log in as admin.");
         setShowDangerAlert(true);
@@ -69,7 +70,7 @@ function Login() {
       <div id="app">
         <section className="section">
           <img
-          alt=""
+            alt=""
             src={Logo}
             width={170}
             style={{ display: "block", margin: "0 auto" }}

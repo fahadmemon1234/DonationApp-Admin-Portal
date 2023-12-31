@@ -1,47 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "../Nav";
 import Footer from "../Footer";
 import { ref, push, onValue, update, remove } from "firebase/database";
 import { db, storage } from "../../Config/firebase";
 import { uploadBytes, getDownloadURL, ref as sRef } from "firebase/storage";
 import $ from "jquery";
-import Swal from "sweetalert2";
-import "select2";
-import "./post.css";
 
 const ItemsPerPage = 7;
 
-function Post() {
-  // const selectRef = useRef(null);
-
-  // useEffect(() => {
-  //   $(selectRef.current).select2();
-  // }, []);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [downloadurl, setDownloadurl] = useState("");
-
-  const [Description, setDescription] = useState("");
-
+function VideoPost() {
+  const [hdnimg, sethdnImg] = useState("");
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showDangerAlert, setShowDangerAlert] = useState(false);
   const [dangerAlertMessage, setDangerAlertMessage] = useState("");
 
+  const [downloadurl, setDownloadurl] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [Description, setDescription] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setSelectedFile(file);
 
-    if (file) {
+    if (file && file.type.startsWith("video/")) {
+      setSelectedFile(file);
+
       const reader = new FileReader();
-
       reader.onloadend = () => {
         setSelectedImage(reader.result);
       };
-
       reader.readAsDataURL(file);
 
-      // Upload image to Firebase Storage
-      const storageRef = sRef(storage, `PostingImg/${file.name}`);
+      // Upload video to Firebase Storage
+      const storageRef = sRef(storage, `PostingVideos/${file.name}`);
 
       uploadBytes(storageRef, file)
         .then((snapshot) => {
@@ -55,10 +46,50 @@ function Post() {
             });
         })
         .catch((error) => {
-          console.error("Error uploading image:", error);
+          console.error("Error uploading video:", error);
         });
+    } else {
+      // Handle the case where a non-video file is selected
+      console.error("Please select a valid video file.");
     }
   };
+
+  // get data
+
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    // Reference to the 'Posting' node in Firebase Realtime Database
+    const tasksRef = ref(db, "VideoPosting");
+
+    // Attach an event listener for data changes
+    const fetchData = () => {
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          // Convert the object of tasks into an array
+          const dataArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setTableData(dataArray);
+        }
+      });
+    };
+
+    fetchData();
+  }, []);
+
+  const [expandedRows, setExpandedRows] = useState({});
+
+  const toggleShowMore = (id) => {
+    setExpandedRows((prevExpandedRows) => ({
+      ...prevExpandedRows,
+      [id]: !prevExpandedRows[id],
+    }));
+  };
+
+  const sortedTableData = tableData.sort((a, b) => b.id - a.id);
 
   const handleAdd = () => {
     setSelectedFile(null);
@@ -66,7 +97,22 @@ function Post() {
     setDescription("");
     sethdnImg("");
   };
+
+  //   Pagination
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalItems = sortedTableData.length;
+  const totalPages = Math.ceil(totalItems / ItemsPerPage);
+
+  const startIndex = (currentPage - 1) * ItemsPerPage;
+  const endIndex = startIndex + ItemsPerPage;
+
+  const visibleItems = sortedTableData.slice(startIndex, endIndex);
+
+  //   Save
   const [hdnID, sethdnID] = useState("");
+
   const handleSave = async () => {
     try {
       const currentDate = new Date(); // Get the current date and time
@@ -79,16 +125,16 @@ function Post() {
           setShowDangerAlert(true);
         } else {
           if (selectedFile !== "" && selectedFile !== null) {
-            const PostingRef = ref(db, `Posting/${hdnID}`);
+            const PostingRef = ref(db, `VideoPosting/${hdnID}`);
             const newPosting = {
-              img: downloadurl,
+              Video: downloadurl,
               description: Description,
               createdDate: formattedDate,
               uploadTime: currentTime,
             };
             await update(PostingRef, newPosting);
           } else {
-            const PostingRef = ref(db, `Posting/${hdnID}`);
+            const PostingRef = ref(db, `VideoPosting/${hdnID}`);
             const newPosting = {
               img: hdnimg,
               description: Description,
@@ -113,10 +159,10 @@ function Post() {
           setDangerAlertMessage("Description can't be empty");
           setShowDangerAlert(true);
         } else if (!selectedFile) {
-          setDangerAlertMessage("img can't be empty");
+          setDangerAlertMessage("Video can't be empty");
           setShowDangerAlert(true);
         } else if (Description !== "" && selectedFile !== "") {
-          const PostingRef = ref(db, "Posting");
+          const PostingRef = ref(db, "VideoPosting");
           const newPosting = {
             img: downloadurl,
             description: Description,
@@ -170,95 +216,12 @@ function Post() {
     $(".close").click();
   };
 
-  // get data
 
-  const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    // Reference to the 'Posting' node in Firebase Realtime Database
-    const tasksRef = ref(db, "Posting");
 
-    // Attach an event listener for data changes
-    const fetchData = () => {
-      onValue(tasksRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          // Convert the object of tasks into an array
-          const dataArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setTableData(dataArray);
-        }
-      });
-    };
 
-    fetchData();
-  }, []);
-
-  const [expandedRows, setExpandedRows] = useState({});
-
-  const toggleShowMore = (id) => {
-    setExpandedRows((prevExpandedRows) => ({
-      ...prevExpandedRows,
-      [id]: !prevExpandedRows[id],
-    }));
-  };
-
-  const sortedTableData = tableData.sort((a, b) => b.id - a.id);
-
-  // Delete
-
-  // const handleDeleteClick = () => {};
-
-  const handleDeleteClick = (itemId) => {
-    Swal.fire({
-      title: "Confirm Deletion",
-      text: "Are you sure you want to delete this item?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "OK",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // User clicked OK, show success modal
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Your item has been deleted.",
-          confirmButtonColor: "#28a745",
-        });
-
-        // Perform additional actions if needed
-        console.log("OK button clicked");
-        deleteItem(itemId);
-      } else {
-        console.log("Cancel button clicked");
-      }
-    });
-  };
-
-  const deleteItem = async (itemId) => {
-    try {
-      // Specify the path to the item you want to delete
-      const itemRef = ref(db, `Posting/${itemId}`);
-
-      // Remove the item from the database
-      await remove(itemRef);
-
-      console.log("Item deleted successfully");
-    } catch (error) {
-      console.error("Error deleting item:", error.message);
-    }
-  };
-
-  const [hdnimg, sethdnImg] = useState("");
-
-  // Edit Data
-  const handleEditClick = (itemId) => {
-    // console.log("Edit clicked for item with ID:", itemId);
-    // Add your editing logic here
+  const handleEdit = (itemId) =>{
+    debugger;
     sethdnID(itemId.id);
     setDescription(itemId.description);
     setSelectedFile(null);
@@ -266,26 +229,13 @@ function Post() {
     sethdnImg(itemId.img);
     sethdnImg("");
     sethdnImg(itemId.img);
-  };
-
-  //   Pagination
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalItems = sortedTableData.length;
-  const totalPages = Math.ceil(totalItems / ItemsPerPage);
-
-  const startIndex = (currentPage - 1) * ItemsPerPage;
-  const endIndex = startIndex + ItemsPerPage;
-
-  const visibleItems = sortedTableData.slice(startIndex, endIndex);
+  }
 
   return (
     <>
       <Nav />
 
       <div className="main-content">
-        {/* Main */}
         <input type="hidden" name="yourHiddenFieldName" value={hdnimg} />
         <input type="hidden" name="yourHiddenFieldName" value={hdnID} />
 
@@ -294,7 +244,7 @@ function Post() {
             <div className="container">
               <div className="row" style={{ alignItems: "center" }}>
                 <div className="col-md-6 col-sm-6 col-lg-6">
-                  <h1>Posting</h1>
+                  <h1>Video Posting</h1>
                 </div>
                 <div className="col-md-6 col-sm-6 col-lg-6">
                   <button
@@ -316,7 +266,7 @@ function Post() {
                 <table class="table table-striped">
                   <thead style={{ background: "green" }}>
                     <tr>
-                     
+                      
                       <th
                         style={{
                           color: "white",
@@ -324,7 +274,7 @@ function Post() {
                           width: "100px",
                         }}
                       >
-                        Post Img
+                        Post Video
                       </th>
                       <th style={{ color: "white", border: "1px solid white" }}>
                         Description
@@ -352,17 +302,22 @@ function Post() {
                   <tbody>
                     {visibleItems.map((item) => (
                       <tr>
-                        
+                       
                         <td style={{ border: "1px solid green" }}>
-                          <img
-                            alt=""
-                            src={item.img}
+                          <video
+                            controls
+                            autoPlay
+                            muted
                             className="rounded-circle"
-                            width="35"
+                            width="100"
+                            height={100}
                             data-toggle="tooltip"
                             title={item.name}
                             style={{ display: "block", margin: "0 auto" }}
-                          />
+                          >
+                            <source src={item.img} type="video/mp4" />
+                            Your browser does not support the video tag.
+                          </video>
                         </td>
                         <td style={{ border: "1px solid green" }}>
                           {item.description &&
@@ -404,19 +359,19 @@ function Post() {
                         <td style={{ border: "1px solid green" }}>
                           {item.createdDate}
                         </td>
+
                         <td style={{ border: "1px solid green" }}>
                           <div style={{ display: "flex" }}>
                             <button
                               className="btn btn-primary"
-                              onClick={() => handleEditClick(item)}
                               data-toggle="modal"
                               data-target="#basicModal"
+                              onClick={()=>handleEdit(item)}
                             >
                               Edit
                             </button>
                             <button
                               style={{ marginLeft: "10px" }}
-                              onClick={() => handleDeleteClick(item.id)}
                               className="btn btn-danger"
                             >
                               Delete
@@ -481,8 +436,6 @@ function Post() {
         </div>
       </div>
 
-      <Footer />
-
       {/* <!-- basic modal --> */}
       <div
         class="modal fade"
@@ -510,66 +463,68 @@ function Post() {
               </button>
             </div>
             <div class="modal-body">
-              
-              
-                <>
-                  <div className="row">
-                    <div className="col-md-3 col-lg-3 col-sm-3">
-                      {selectedImage && (
-                        <div>
-                          <img
-                            src={selectedImage}
-                            alt="Selected"
-                            style={{
-                              maxWidth: "100%",
-                              maxHeight: "100px",
-                              borderRadius: "60%",
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="col-md-9 col-lg-9 col-sm-9">
-                      <div class="section-title">
-                        Img Upload: <span className="Validation">*</span>
-                      </div>
-                      <div class="custom-file">
-                        <input
-                          type="file"
-                          class="custom-file-input"
-                          id="customFile"
-                          accept=".jpg, .jpeg, .png"
-                          onChange={(e) => handleFileChange(e)}
+              <>
+                <div className="row">
+                  <div className="col-md-3 col-lg-3 col-sm-3">
+                    {/* Display a video player for video preview */}
+                    {selectedFile && selectedFile.type.startsWith("video/") && (
+                      <video
+                        controls
+                        autoPlay
+                        muted
+                        width={100}
+                        height={100}
+                        style={{
+                          borderRadius: "60%",
+                        }}
+                      >
+                        <source
+                          src={URL.createObjectURL(selectedFile)}
+                          type={selectedFile.type}
                         />
-                        <label class="custom-file-label" for="customFile">
-                          {selectedFile
-                            ? selectedFile.name.length > 20
-                              ? `${selectedFile.name.substring(0, 20)}...`
-                              : selectedFile.name
-                            : "Choose File"}
-                        </label>
-                      </div>
-                    </div>
+                      </video>
+                    )}
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-12 col-lg-12 col-sm-12">
-                      <div class="form-group" style={{ paddingTop: "20px" }}>
-                        <label>
-                          Description: <span className="Validation">*</span>
-                        </label>
-                        <textarea
-                          class="form-control"
-                          placeholder="What's your mind?"
-                          value={Description}
-                          onChange={(e) => setDescription(e.target.value)}
-                        ></textarea>
-                      </div>
+                  <div className="col-md-9 col-lg-9 col-sm-9">
+                    <div class="section-title">
+                      Video Upload: <span className="Validation">*</span>
+                    </div>
+                    <div class="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="customFile"
+                        accept=".mp4, .mkv, .avi"
+                        onChange={(e) => handleFileChange(e)}
+                      />
+                      <label htmlFor="customFile" className="custom-file-label">
+                        {selectedFile
+                          ? selectedFile.name.length > 20
+                            ? `${selectedFile.name.substring(0, 20)}...`
+                            : selectedFile.name
+                          : "Choose File"}
+                      </label>
                     </div>
                   </div>
-                </>
-              
+                </div>
+
+                <div className="row">
+                  <div className="col-md-12 col-lg-12 col-sm-12">
+                    <div class="form-group" style={{ paddingTop: "20px" }}>
+                      <label>
+                        Description: <span className="Validation">*</span>
+                      </label>
+                      <textarea
+                        class="form-control"
+                        placeholder="What's your mind?"
+                        value={Description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </>
             </div>
             <div class="modal-footer bg-whitesmoke br">
               <button
@@ -590,6 +545,8 @@ function Post() {
           </div>
         </div>
       </div>
+
+      <Footer />
 
       {/* Notify */}
       {/* Success Alert */}
@@ -638,4 +595,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default VideoPost;

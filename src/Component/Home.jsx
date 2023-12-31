@@ -1,13 +1,124 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Nav from "./Nav";
 import Footer from "./Footer";
+import { ref, onValue } from "firebase/database";
+import { db } from "../Config/firebase";
 
 function Home() {
+  const [tableData, setTableData] = useState([]);
+  const [previousCount, setPreviousCount] = useState(0);
+
+  useEffect(() => {
+    const tasksRef = ref(db, "Posting");
+
+    const fetchData = () => {
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const dataArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setPreviousCount(tableData.length); // Set the previous count before updating tableData
+          setTableData(dataArray);
+        }
+      });
+    };
+
+    fetchData();
+  }, [tableData.length]);
+
+
+  const percentageIncrease = ((tableData.length - previousCount) / previousCount) * 100;
+
+
+
+  const [tableDataVideo, setTableDataVideo] = useState([]);
+  const [previousCountVideo, setPreviousCountVideo] = useState(0);
+
+  useEffect(() => {
+    const tasksRef = ref(db, "VideoPosting");
+
+    const fetchData = () => {
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const dataArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setPreviousCountVideo(tableDataVideo.length); // Set the previous count before updating tableData
+          setTableDataVideo(dataArray);
+        }
+      });
+    };
+
+    fetchData();
+  }, [tableDataVideo.length]);
+
+  const percentageIncreaseVideo = ((tableDataVideo.length - previousCountVideo) / previousCountVideo) * 100;
+
+
+
+  
+  const [tableDataRequest, setTableDataRequest] = useState([]);
+  const [previousCountRequest, setPreviousCountRequest] = useState(0);
+
+  useEffect(() => {
+    const tasksRef = ref(db, "Request");
+
+    const fetchData = () => {
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const dataArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setPreviousCountRequest(tableDataRequest.length); // Set the previous count before updating tableData
+          setTableDataRequest(dataArray);
+        }
+      });
+    };
+
+    fetchData();
+  }, [tableDataRequest.length]);
+
+  const percentageIncreaseRequest = ((tableDataRequest.length - previousCountRequest) / previousCountRequest) * 100;
+
+
+
+  const [tableDataDonation, setTableDataDonation] = useState([]);
+  const [previousCountDonation, setPreviousCountDonation] = useState(0);
+
+  useEffect(() => {
+    const tasksRef = ref(db, "Donation");
+
+    const fetchData = () => {
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const dataArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          setPreviousCountDonation(tableDataDonation.length); // Set the previous count before updating tableData
+          setTableDataDonation(dataArray);
+        }
+      });
+    };
+
+    fetchData();
+  }, [tableDataDonation.length]);
+
+  const percentageIncreaseDonation = ((tableDataDonation.length - previousCountDonation) / previousCountDonation) * 100;
+
+
+
   return (
     <>
-      <Nav/>
+      <Nav />
       <div className="main-content">
-
         {/* Main */}
 
         <section className="section">
@@ -19,10 +130,10 @@ function Home() {
                     <div className="row ">
                       <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
                         <div className="card-content">
-                          <h5 className="font-15">New Booking</h5>
-                          <h2 className="mb-3 font-18">258</h2>
+                          <h5 className="font-15">Img Post</h5>
+                          <h2 className="mb-3 font-18">{tableData.length}</h2>
                           <p className="mb-0">
-                            <span className="col-green">10%</span> Increase
+                          <span className="col-green">{percentageIncrease.toFixed(2)}%</span> Increase
                           </p>
                         </div>
                       </div>
@@ -42,11 +153,11 @@ function Home() {
                   <div className="align-items-center justify-content-between">
                     <div className="row ">
                       <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
-                        <div className="card-content">
-                          <h5 className="font-15"> Customers</h5>
-                          <h2 className="mb-3 font-18">1,287</h2>
+                      <div className="card-content">
+                          <h5 className="font-15">Video Post</h5>
+                          <h2 className="mb-3 font-18">{tableDataVideo.length}</h2>
                           <p className="mb-0">
-                            <span className="col-orange">09%</span> Decrease
+                          <span className="col-green">{percentageIncreaseVideo.toFixed(2)}%</span> Increase
                           </p>
                         </div>
                       </div>
@@ -66,12 +177,11 @@ function Home() {
                   <div className="align-items-center justify-content-between">
                     <div className="row ">
                       <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
-                        <div className="card-content">
-                          <h5 className="font-15">New Project</h5>
-                          <h2 className="mb-3 font-18">128</h2>
+                      <div className="card-content">
+                          <h5 className="font-15">Request</h5>
+                          <h2 className="mb-3 font-18">{tableDataRequest.length}</h2>
                           <p className="mb-0">
-                            <span className="col-green">18%</span>
-                            Increase
+                          <span className="col-green">{percentageIncreaseRequest.toFixed(2)}%</span> Increase
                           </p>
                         </div>
                       </div>
@@ -91,11 +201,11 @@ function Home() {
                   <div className="align-items-center justify-content-between">
                     <div className="row ">
                       <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
-                        <div className="card-content">
-                          <h5 className="font-15">Revenue</h5>
-                          <h2 className="mb-3 font-18">$48,697</h2>
+                      <div className="card-content">
+                          <h5 className="font-15">Donation</h5>
+                          <h2 className="mb-3 font-18">{tableDataDonation.length}</h2>
                           <p className="mb-0">
-                            <span className="col-green">42%</span> Increase
+                          <span className="col-green">{percentageIncreaseDonation.toFixed(2)}%</span> Increase
                           </p>
                         </div>
                       </div>
@@ -835,9 +945,7 @@ function Home() {
                         Query
                       </div>
                       <span className="font-weight-bold">#85784</span>
-                      <a href="/#">
-                        Are you provide template in Angular?
-                      </a>
+                      <a href="/#">Are you provide template in Angular?</a>
                       <p className="my-1">
                         can you provide template in latest angular 8.
                       </p>
@@ -861,9 +969,7 @@ function Home() {
                         Enhancement
                       </div>
                       <span className="font-weight-bold">#25874</span>
-                      <a href="/#">
-                        About template page load speed
-                      </a>
+                      <a href="/#">About template page load speed</a>
                       <p className="my-1">
                         Hi, John, can you work on increase page speed of
                         template...
@@ -962,7 +1068,7 @@ function Home() {
           </div>
         </section>
         <div className="settingSidebar">
-          <a href="/#" className="settingPanelToggle">
+          <a href="#" className="settingPanelToggle">
             <i className="fa fa-spin fa-cog"></i>
           </a>
           <div className="settingSidebar-body ps-container ps-theme-default">
@@ -1095,12 +1201,9 @@ function Home() {
             </div>
           </div>
         </div>
+      </div>
 
-
-        </div>
-
-        <Footer/>
-
+      <Footer />
     </>
   );
 }

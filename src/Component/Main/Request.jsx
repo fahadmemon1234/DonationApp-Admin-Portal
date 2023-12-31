@@ -19,7 +19,7 @@ function Request() {
 
   useEffect(() => {
     // Reference to the 'Posting' node in Firebase Realtime Database
-    const tasksRef = ref(db, "Donation");
+    const tasksRef = ref(db, "Request");
 
     // Attach an event listener for data changes
     const fetchData = () => {
@@ -55,7 +55,7 @@ function Request() {
   const handleEditClick = async (item) => {
     try {
       if (item.id !== "" && item.id !== null) {
-        const PostingRef = ref(db, `Donation/${item.id}`);
+        const PostingRef = ref(db, `Request/${item.id}`);
         const newPosting = {
           RequestType: true,
         };
@@ -99,49 +99,72 @@ function Request() {
 
   // const handleDeleteClick = () => {};
 
-  const handleDeleteClick = (itemId) => {
-    Swal.fire({
-      title: "Confirm Deletion",
-      text: "Are you sure you want to delete this item?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "OK",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // User clicked OK, show success modal
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "Your item has been deleted.",
-          confirmButtonColor: "#28a745",
-        });
+  // const handleDeleteClick = (itemId) => {
+  //   Swal.fire({
+  //     title: "Confirm Deletion",
+  //     text: "Are you sure you want to delete this item?",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#d33",
+  //     cancelButtonColor: "#3085d6",
+  //     confirmButtonText: "OK",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       // User clicked OK, show success modal
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "Deleted!",
+  //         text: "Your item has been deleted.",
+  //         confirmButtonColor: "#28a745",
+  //       });
 
-        // Perform additional actions if needed
-        console.log("OK button clicked");
-        deleteItem(itemId);
-      } else {
-        console.log("Cancel button clicked");
-      }
-    });
-  };
+  //       // Perform additional actions if needed
+  //       console.log("OK button clicked");
+  //       deleteItem(itemId);
+  //     } else {
+  //       console.log("Cancel button clicked");
+  //     }
+  //   });
+  // };
 
-  const deleteItem = async (itemId) => {
+  // const deleteItem = async (itemId) => {
+  //   try {
+  //     // Specify the path to the item you want to delete
+  //     const itemRef = ref(db, `Request/${itemId}`);
+
+  //     // Remove the item from the database
+  //     await remove(itemRef);
+
+  //     console.log("Item deleted successfully");
+  //   } catch (error) {
+  //     console.error("Error deleting item:", error.message);
+  //   }
+  // };
+
+
+
+  const handleRejectedClick = async (item)=>{
     try {
-      // Specify the path to the item you want to delete
-      const itemRef = ref(db, `Donation/${itemId}`);
+      if (item.id !== "" && item.id !== null) {
+        const PostingRef = ref(db, `Request/${item.id}`);
+        const newPosting = {
+          RequestType: false,
+        };
 
-      // Remove the item from the database
-      await remove(itemRef);
+        await update(PostingRef, newPosting);
 
-      console.log("Item deleted successfully");
+        setShowSuccessAlert(true);
+      } else {
+        setDangerAlertMessage("Not Approved");
+        setShowDangerAlert(true);
+      }
     } catch (error) {
-      console.error("Error deleting item:", error.message);
+      console.error("Error updating document: ", error.message);
+      // Handle the error, e.g., show a notification to the user
+      setDangerAlertMessage("Error updating document: ", error.message);
+      setShowDangerAlert(true);
     }
-  };
-
-
+  }
 
 
 
@@ -156,7 +179,7 @@ const startIndex = (currentPage - 1) * ItemsPerPage;
 const endIndex = startIndex + ItemsPerPage;
 
 const visibleItems = sortedTableData.slice(startIndex, endIndex);
-
+ 
   return (
     <>
       <Nav />
@@ -177,15 +200,7 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                 <table class="table table-striped">
                   <thead style={{ background: "green" }}>
                     <tr>
-                      <th
-                        style={{
-                          color: "white",
-                          border: "1px solid white",
-                          width: "40px",
-                        }}
-                      >
-                        Action
-                      </th>
+                      
                       <th
                         style={{
                           color: "white",
@@ -205,15 +220,7 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                       >
                         Description
                       </th>
-                      <th
-                        style={{
-                          color: "white",
-                          border: "1px solid white",
-                          width: "200px",
-                        }}
-                      >
-                        Record Type
-                      </th>
+                     
                       <th
                         style={{
                           color: "white",
@@ -223,6 +230,15 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                       >
                         Time
                       </th>
+                      <th
+                        style={{
+                          color: "white",
+                          border: "1px solid white",
+                          width: "40px",
+                        }}
+                      >
+                        Action
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -230,25 +246,7 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                       {visibleItems.map((item) => (
                         !item.RequestType && (
                           <tr>
-                            <td style={{ border: "1px solid green" }}>
-                              <div style={{ display: "flex" }}>
-                                <button
-                                  className="btn btn-primary"
-                                  data-toggle="modal"
-                                  data-target="#basicModal"
-                                  onClick={() => handleEditClick(item)}
-                                >
-                                  Approved
-                                </button>
-                                <button
-                                  style={{ marginLeft: "10px" }}
-                                  className="btn btn-danger"
-                                  onClick={() => handleDeleteClick(item.id)}
-                                >
-                                  Delete
-                                </button>
-                              </div>
-                            </td>
+                           
 
                             <td style={{ border: "1px solid green" }}>
                               {item.name}
@@ -291,16 +289,29 @@ const visibleItems = sortedTableData.slice(startIndex, endIndex);
                               )}
                             </td>
 
-                            <td
-                              style={{
-                                border: "1px solid green",
-                                fontWeight: "700",
-                              }}
-                            >
-                              {item.donationType}
-                            </td>
+                           
                             <td style={{ border: "1px solid green" }}>
                               {item.uploadTime}
+                            </td>
+
+                            <td style={{ border: "1px solid green" }}>
+                              <div style={{ display: "flex" }}>
+                                <button
+                                  className="btn btn-primary"
+                                  data-toggle="modal"
+                                  data-target="#basicModal"
+                                  onClick={() => handleEditClick(item)}
+                                >
+                                  Approved
+                                </button>
+                                <button
+                                  style={{ marginLeft: "10px" }}
+                                  className="btn btn-danger"
+                                  onClick={() => handleRejectedClick(item)}
+                                >
+                                  Rejected
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         )
