@@ -5,6 +5,7 @@ import { ref, push, onValue, update, remove } from "firebase/database";
 import { db, storage } from "../../Config/firebase";
 import { uploadBytes, getDownloadURL, ref as sRef } from "firebase/storage";
 import $ from "jquery";
+import Swal from "sweetalert2";
 
 const ItemsPerPage = 7;
 
@@ -127,7 +128,7 @@ function VideoPost() {
           if (selectedFile !== "" && selectedFile !== null) {
             const PostingRef = ref(db, `VideoPosting/${hdnID}`);
             const newPosting = {
-              Video: downloadurl,
+              img: downloadurl,
               description: Description,
               createdDate: formattedDate,
               uploadTime: currentTime,
@@ -230,6 +231,54 @@ function VideoPost() {
     sethdnImg("");
     sethdnImg(itemId.img);
   }
+
+
+
+   // Delete
+
+  // const handleDeleteClick = () => {};
+
+  const handleDelete = (itemId) => {
+    Swal.fire({
+      title: "Confirm Deletion",
+      text: "Are you sure you want to delete this item?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "OK",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User clicked OK, show success modal
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "Your item has been deleted.",
+          confirmButtonColor: "#28a745",
+        });
+
+        // Perform additional actions if needed
+        console.log("OK button clicked");
+        deleteItem(itemId);
+      } else {
+        console.log("Cancel button clicked");
+      }
+    });
+  };
+
+  const deleteItem = async (itemId) => {
+    try {
+      // Specify the path to the item you want to delete
+      const itemRef = ref(db, `VideoPosting/${itemId}`);
+
+      // Remove the item from the database
+      await remove(itemRef);
+
+      console.log("Item deleted successfully");
+    } catch (error) {
+      console.error("Error deleting item:", error.message);
+    }
+  };
 
   return (
     <>
@@ -373,6 +422,7 @@ function VideoPost() {
                             <button
                               style={{ marginLeft: "10px" }}
                               className="btn btn-danger"
+                              onClick={()=>handleDelete(item.id)}
                             >
                               Delete
                             </button>
